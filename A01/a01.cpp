@@ -1,10 +1,13 @@
 /******************************************************************************
 # Author:       Aiden Jungels
-# Assignment:   
-# Date:         
-# Description:  
-# Input:        
-# Output:       
+# Assignment:   Coding Assignment 1
+# Date:         1/13/26
+# Description:  This program asks the user to enter 0-100 scores, then
+#               provides a menu with various options to view data from the
+#               scores input
+# Input:        int numScores, int score, int menuChoice, int threshold
+# Output:       int scores[], int maxScore, int minScore, int avgScore,
+#               int numAboveThreshold
 ******************************************************************************/
 #include <iostream>
 
@@ -15,12 +18,12 @@ void welcome();
 int getArrayInput(int (&arr)[100]);
 void displayMenu();
 int getMenuInput();
-// Calculation Functions
+int getThreshold();
 void printScores(int arr[], int size);
 int findMax(int arr[], int size);
 int findMin(int arr[], int size);
 double calculateAverage(int arr[], int size);
-int countAboveThreshhold(int arr[], int size, int thresholdd);
+int countAboveThreshold(int arr[], int size, int threshold);
 
 int main() {
 
@@ -28,6 +31,11 @@ int main() {
     int scores[100];
     int numScores = 0;
     int menuChoice = 0;
+    int maxScore = 0;
+    int minScore = 0;
+    double avgScore = 0.0;
+    int threshold = 0;
+    int numAvoveThreshold = 0;
 
     // Welcome message
     welcome();
@@ -40,23 +48,30 @@ int main() {
         // Display menu and get menu choice
         displayMenu();
         menuChoice = getMenuInput();
+        cout << endl;
 
         switch (menuChoice)
         {
             case 1:
-                
+                printScores(scores, numScores);
                 break;
             case 2:
-                
+                maxScore = findMax(scores, numScores);
+                cout << "The maximum score is: " << maxScore << endl;
                 break;
             case 3:
-                
+                minScore = findMin(scores, numScores);
+                cout << "The minimum score is: " << minScore << endl;
                 break;
             case 4:
-                
+                avgScore = calculateAverage(scores, numScores);
+                cout << "The average of all scores is: " << avgScore << endl;
                 break;
             case 5:
-                
+                threshold = getThreshold();
+                numAvoveThreshold = countAboveThreshold(scores, numScores, threshold);
+                cout << endl << "The number of scores above the threshold of ";
+                cout << threshold << " is: " << numAvoveThreshold << endl;
                 break;
             default:
                 break;
@@ -106,7 +121,7 @@ int getArrayInput(int (&arr)[100]) {
     // Loop and add inputs
     for (int i = 0; i < numInputs; ++i) {
         // Get score input and validate
-        cout << "Please enter a score (integer): ";
+        cout << "Please enter the next score (integer): ";
         cin >> nextScore;
 
         while (!cin) {
@@ -131,6 +146,7 @@ int getArrayInput(int (&arr)[100]) {
 // Return: none
 void displayMenu() {
     cout << endl;
+    cout << "===== Menu =====" << endl;
     cout << "1. Print all Scores" << endl;
     cout << "2. Find Maximum Score" << endl;
     cout << "3. Find Minimum Score" << endl;
@@ -139,6 +155,11 @@ void displayMenu() {
     cout << "0. Quit" << endl;
 }
 
+// Name: getMenuInput()
+// Desc: Gets the users menu choice
+// Input: none
+// Output: Input prompt, maybe error message
+// Return: int menuChoice
 int getMenuInput() {
     int menuChoice = 0;
     
@@ -155,4 +176,129 @@ int getMenuInput() {
     }
 
     return menuChoice;
+}
+
+// Name: printScores()
+// Desc: Displays all the scores in a grid of 5 scores per row
+// Input: int arr[], int size
+// Output: Grid of all scores
+// Return: none
+void printScores(int arr[], int size) {
+    cout << endl << "  --Table of all scores input--" << endl;
+    
+    // Outer loop to control what index is being printed
+    for (int i = 0; i < size; i += 5) {
+        // Inner loop to control num prints per row
+        for (int j = 0; j < 5; ++j) {
+            // Only print if value is in the array
+            if (i + j < size) {
+                cout << arr[i + j] << "\t";
+            }
+        }
+        cout << endl;
+    }
+}
+
+// Name: findMax()
+// Desc: Returns the highest score in the array
+// Input: int arr[], int size
+// Output: No scores message if no scores
+// Return: int maxScore
+int findMax(int arr[], int size) {
+    int maxScore = 0;
+
+    // Loop if there are any scores, otherwise display no scores message
+    if (size > 0) {
+        for (int i = 0; i < size; ++i) {
+            // Check if score is greater than max
+            if ((arr[i] > maxScore) || (i == 0)) {
+                maxScore = arr[i];
+            }
+        }
+    }
+    else {
+        cout << "No scores were entered, so there is no max score." << endl;
+    }
+
+    return maxScore;
+}
+
+// Name: findMin()
+// Desc: Returns the lowest score in the array
+// Input: int arr[], int size
+// Output: No scores message if no scores
+// Return: int minScore
+int findMin(int arr[], int size) {
+    int minScore = 0;
+
+    // Loop if there are any scores, otherwise display no scores message
+    if (size > 0) {
+        for (int i = 0; i < size; ++i) {
+            // Check if score is smaller than min
+            if ((arr[i] < minScore) || (i == 0)) {
+                minScore = arr[i];
+            }
+        }
+    }
+    else {
+        cout << "No scores were entered, so there is no min score." << endl;
+    }
+
+    return minScore;
+}
+
+// Name: calculateAverage()
+// Desc: returns the average of all scores
+// Input: int arr[], int size
+// Output: none
+double calculateAverage(int arr[], int size) {
+    double avg = 0.0;
+    int total = 0;
+
+    // Loop through and add scores to total
+    for (int i = 0; i < size; ++i) {
+        total += arr[i];
+    }
+
+    avg = static_cast<double>(total) / size;
+
+    return avg;
+}
+
+// Name: getThreshold()
+// Desc: Gets the threshold value to search for later
+// Input: none
+// Output: threshold prompt, maybe error message
+int getThreshold() {
+    int threshold = 0;
+    
+    // Get and validate threshold input
+    cout << "Enter the threshold in which scores must be above: ";
+    cin >> threshold;
+    
+    while (!cin) {
+        cout << "Please enter an integer!" << endl;
+        cout << ">> ";
+        cin.clear();
+        cin.ignore(100, '\n');
+        cin >> threshold;
+    }
+
+    return threshold;
+}
+
+// Name: countAboveThreshold
+// Desc: Counts each score that is above a given threshold
+// Input: int arr[], int size, int threshold
+// Output: none
+int countAboveThreshold(int arr[], int size, int threshold) {
+    int numScoresAbove = 0;
+
+    for (int i = 0; i < size; ++i) {
+        if (arr[i] > threshold) {
+            ++numScoresAbove;
+        }
+    }
+
+    return numScoresAbove;
 }
