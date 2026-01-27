@@ -141,7 +141,6 @@ char getMovement() {
         cin.ignore(100, '\n');
         cin >> input;
         input = tolower(input);
-        cout << "Input is: " << input << endl;
     }
 
     return input;
