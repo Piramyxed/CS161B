@@ -7,9 +7,12 @@
 # Output:       
 # Sources:      https://stackoverflow.com/questions/655065/
                 when-should-i-use-the-new-keyword-in-c
+                https://www.geeksforgeeks.org/cpp/
+                new-and-delete-operators-in-cpp-for-dynamic-memory/
 ******************************************************************************/
 #include <iostream>
 #include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -34,6 +37,7 @@ const int MAX_FILE_NAME = 101;
 bool openImageFile(ifstream &inImage);
 bool getImageStats(ifstream &inImage, Image &image);
 Pixel** parseImageFile(ifstream &inImage, const Image image);
+void printNewImage(Image &image);
 
 // Main Function
 int main() {
@@ -62,9 +66,16 @@ int main() {
 
 
             //image.pixels[/*row number*/][/*num pixel objects (3 numbers in each) print each of the three numbers with a space*/]
-
+            printNewImage(image);
         }
     }
+
+    // Delete the excess from the pointer array
+    for (int i = 0; i < image.height; ++i) {
+        delete[] image.pixels[i];
+    }
+    
+    delete[] image.pixels;
 
     inImage.close();
     return 0;
@@ -135,15 +146,29 @@ Pixel** parseImageFile(ifstream &inImage, const Image image) {
             inImage >> nextPixel.g;
             inImage >> nextPixel.b;
 
-            pixelRow[w] = nextPixel;
+            /*
+            cout << "For w loop in pIF -- r: "
+                 << nextPixel.r << " g: "
+                 << nextPixel.g << " b: "
+                 << nextPixel.b << endl;
+            */
 
+            pixelRow[w] = nextPixel;
         }
 
         imagePixels[h] = pixelRow;
     }
 
-    delete[] imagePixels;
+    /*
+    cout << "test r: " << imagePixels[0][0].r << endl;
+    cout << "test g: " << imagePixels[0][0].g << endl;
+    cout << "test b: " << imagePixels[0][0].b << endl;
 
+    cout << "Width 1" << endl;
+    cout << "test r: " << imagePixels[0][1].r << endl;
+    cout << "test g: " << imagePixels[0][1].g << endl;
+    cout << "test b: " << imagePixels[0][1].b << endl;
+    */
     
     return imagePixels;
     
@@ -161,4 +186,32 @@ Pixel** parseImageFile(ifstream &inImage, const Image image) {
 
 
             //image.pixels[/*row number*/][/*num pixel objects (3 numbers in each) print each of the three numbers with a space*/]
+}
+
+void printNewImage(Image &image) {
+    ofstream outFile;
+
+    outFile.open("output.ppm");
+
+    if (!outFile.is_open()) {
+        cout << "Failed to open output.ppm file" << endl;
+    }
+    else {
+        // Write header
+        outFile << "P3" << endl;
+        outFile << image.width << " " << image.height << endl;
+        outFile << image.maxColorVal << endl;
+
+        // Write image data
+        for (int h = 0; h < image.height; ++h) {
+            for (int w = 0; w < image.width; ++w) {
+                outFile << image.pixels[h][w].r << " "
+                        << image.pixels[h][w].g << " "
+                        << image.pixels[h][w].b << " ";
+            }
+            outFile << endl;
+        }
+    }
+
+    outFile.close();
 }
