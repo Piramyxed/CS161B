@@ -73,6 +73,8 @@ int getInput(string prompt) {
         cout << "Invalid Input! Please try again." << endl;
         cout << ">> ";
         cin >> input;
+        cin.clear();
+        cin.ignore(100, '\n');
     }
 
     return input;
