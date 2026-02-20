@@ -36,7 +36,7 @@ const int MAX_FILE_NAME = 101;
 // Function Prototypes
 bool openImageFile(ifstream &inImage);
 bool getImageStats(ifstream &inImage, Image &image);
-Pixel** parseImageFile(ifstream &inImage, const Image image);
+Pixel** parseImageFile(ifstream &inImage, const Image &image);
 void printNewImage(Image &image);
 
 // Main Function
@@ -67,15 +67,13 @@ int main() {
 
             //image.pixels[/*row number*/][/*num pixel objects (3 numbers in each) print each of the three numbers with a space*/]
             printNewImage(image);
+            // Clear memory from pointer array
+            for (int i = 0; i < image.height; ++i) {
+                delete[] image.pixels[i];
+            }
+            delete[] image.pixels;
         }
     }
-
-    // Delete the excess from the pointer array
-    for (int i = 0; i < image.height; ++i) {
-        delete[] image.pixels[i];
-    }
-    
-    delete[] image.pixels;
 
     inImage.close();
     return 0;
@@ -133,7 +131,7 @@ bool getImageStats(ifstream &inImage, Image &image) {
     return validImage;
 }
 
-Pixel** parseImageFile(ifstream &inImage, const Image image) {
+Pixel** parseImageFile(ifstream &inImage, const Image &image) {
     Pixel** imagePixels = new Pixel*[image.height];
     // Loop height times
     for (int h = 0; h < image.height; ++h) {
