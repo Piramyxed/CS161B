@@ -37,7 +37,8 @@ const int MAX_FILE_NAME = 101;
 bool openImageFile(ifstream &inImage);
 bool getImageStats(ifstream &inImage, Image &image);
 Pixel** parseImageFile(ifstream &inImage, const Image &image);
-void printNewImage(Image &image);
+void applyImageFlip(Image &image);
+void printNewImage(const Image &image);
 
 // Main Function
 int main() {
@@ -50,6 +51,8 @@ int main() {
         if (getImageStats(inImage, image)) {
 
             image.pixels = parseImageFile(inImage, image);
+
+            applyImageFlip(image);
 
             //Pixel** imagePixels;
             
@@ -186,7 +189,38 @@ Pixel** parseImageFile(ifstream &inImage, const Image &image) {
             //image.pixels[/*row number*/][/*num pixel objects (3 numbers in each) print each of the three numbers with a space*/]
 }
 
-void printNewImage(Image &image) {
+
+// Name: applyImageFlip()
+// Desc: horizontally flips all pixels in each row, mirroring the image
+// Input: Image &image
+// Output: none
+// Return: none
+void applyImageFlip(Image &image) {
+    Pixel sparePixel;
+    // Loop for each row (height)
+    for (int h = 0; h < image.height; ++h) {
+        // Loop for each column (width)
+        for (int w = 0; w < (image.width / 2); ++w) {
+            // Get pixel at w (on the first half of the row)
+            sparePixel = image.pixels[h][w];
+
+            // Move 'linked' pixel on the second half of the row
+            // To the position that spare pixel grabbed from
+            image.pixels[h][w] = image.pixels[h][(image.width - 1) - w];
+
+            // Put the spare pixel where the 'linked' pixel in the second
+            // half of the row was
+            image.pixels[h][(image.width - 1) - w] = sparePixel;
+        }
+    }
+}
+
+// Name: printNewImage()
+// Desc: Outputs the final image data to a new file
+// Input: const Image &image
+// Output: Maybe error message
+// Return: none
+void printNewImage(const Image &image) {
     ofstream outFile;
 
     outFile.open("output.ppm");
