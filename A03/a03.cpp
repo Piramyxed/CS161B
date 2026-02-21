@@ -166,29 +166,11 @@ Pixel** parseImageFile(ifstream &inImage, const Image &image) {
             inImage >> nextPixel.g;
             inImage >> nextPixel.b;
 
-            /*
-            cout << "For w loop in pIF -- r: "
-                 << nextPixel.r << " g: "
-                 << nextPixel.g << " b: "
-                 << nextPixel.b << endl;
-            */
-
             pixelRow[w] = nextPixel;
         }
 
         imagePixels[h] = pixelRow;
     }
-
-    /*
-    cout << "test r: " << imagePixels[0][0].r << endl;
-    cout << "test g: " << imagePixels[0][0].g << endl;
-    cout << "test b: " << imagePixels[0][0].b << endl;
-
-    cout << "Width 1" << endl;
-    cout << "test r: " << imagePixels[0][1].r << endl;
-    cout << "test g: " << imagePixels[0][1].g << endl;
-    cout << "test b: " << imagePixels[0][1].b << endl;
-    */
     
     return imagePixels;
 }
