@@ -1,10 +1,10 @@
 /******************************************************************************
 # Author:       Aiden Jungels
-# Assignment:   
-# Date:         
-# Description:  
-# Input:        
-# Output:       
+# Assignment:   A03
+# Date:         2/20/26
+# Description:  This program asks the user for 
+# Input:        char fileName (image as .ppm file to open)
+# Output:       output.ppm file (writes modified image data)
 # Sources:      https://stackoverflow.com/questions/655065/
                 when-should-i-use-the-new-keyword-in-c
                 https://www.geeksforgeeks.org/cpp/
@@ -34,10 +34,13 @@ struct Image {
 const int MAX_FILE_NAME = 101;
 
 // Function Prototypes
+void welcome();
 bool openImageFile(ifstream &inImage);
 bool getImageStats(ifstream &inImage, Image &image);
 Pixel** parseImageFile(ifstream &inImage, const Image &image);
+int programMenu();
 void applyImageFlip(Image &image);
+void applyGrayscale(Image &image);
 void printNewImage(const Image &image);
 
 // Main Function
@@ -45,41 +48,51 @@ int main() {
     ifstream inImage;
     Image image;
 
+    welcome();
+
     // Attempt to open image
     if (openImageFile(inImage)) {
         // Read header of image file
         if (getImageStats(inImage, image)) {
 
-            image.pixels = parseImageFile(inImage, image);
+            int userChoice = programMenu();
 
-            applyImageFlip(image);
+            if (userChoice != 0) {
+                // Parse image into struct
+                image.pixels = parseImageFile(inImage, image);
 
-            //Pixel** imagePixels;
-            
-            // loop height times
-                // Create a single row in the image of pixel object pointers
-                // Loop width times
-                    // Loop 3 times
-                        // First value in r, second g, third b as the pixel struct
-                    // Add pixel object row num
-                // Pixel* pixelRow with length of width
-                // add the Pixel* to Pixel**
-                //image[/*current row in image*/] = pixelRow;
-            //image.pixels = imagePixels;
+                // Apply Transformation
+                if (userChoice == 1) {
+                    applyImageFlip(image);
+                }
+                else if (userChoice == 2) {
+                    applyGrayscale(image);
+                }
 
-
-            //image.pixels[/*row number*/][/*num pixel objects (3 numbers in each) print each of the three numbers with a space*/]
-            printNewImage(image);
-            // Clear memory from pointer array
-            for (int i = 0; i < image.height; ++i) {
-                delete[] image.pixels[i];
+                // Write image to file
+                printNewImage(image);
+                
+                // Clear memory from pointer array
+                for (int i = 0; i < image.height; ++i) {
+                    delete[] image.pixels[i];
+                }
+                delete[] image.pixels;
             }
-            delete[] image.pixels;
         }
     }
 
     inImage.close();
+    cout << endl << "Thank you for using!" << endl;
     return 0;
+}
+
+// Name: welcome()
+// Desc: Displays welcome message
+// Input: none
+// Output: Welcome message
+// Return: none
+void welcome() {
+    cout << "Welcome to the P3 Image manipulator!" << endl;
 }
 
 // Name: openImageFile()
@@ -134,6 +147,12 @@ bool getImageStats(ifstream &inImage, Image &image) {
     return validImage;
 }
 
+// Name: parseImageFile()
+// Desc: Gets data from image file and turns it into a 2D 
+//       array for later processing
+// Input: ifstream &inImage, const Image &image
+// Output: none
+// Return: Pixel** imagePixels
 Pixel** parseImageFile(ifstream &inImage, const Image &image) {
     Pixel** imagePixels = new Pixel*[image.height];
     // Loop height times
@@ -172,23 +191,34 @@ Pixel** parseImageFile(ifstream &inImage, const Image &image) {
     */
     
     return imagePixels;
-    
-    
-    // loop height times
-                // Create a single row in the image of pixel object pointers
-                // Loop width times
-                    // Loop 3 times
-                        // First value in r, second g, third b as the pixel struct
-                    // Add pixel object row num
-                // Pixel* pixelRow with length of width
-                // add the Pixel* to Pixel**
-                //image[/*current row in image*/] = pixelRow;
-            //image.pixels = imagePixels;
-
-
-            //image.pixels[/*row number*/][/*num pixel objects (3 numbers in each) print each of the three numbers with a space*/]
 }
 
+// Name: programMenu()
+// Desc: Displays options menu and manages user choice
+// Input: none
+// Output: program menu
+// Return: int userChoice
+int programMenu() {
+    int userChoice = 0;
+
+    // Display menu
+    cout << endl << "Image Manipulation Options:" << endl;
+    cout << "1. Flip Image Horizontally" << endl;
+    cout << "2. Make Image Grayscale" << endl;
+    cout << "0. Quit" << endl;
+    cout << endl << "Enter your choice: ";
+
+    // Get and validate user input
+    cin >> userChoice;
+    while (!cin || (userChoice < 0 || userChoice > 2)) {
+        cout << "Invalid Input! Please try again: ";
+        cin.clear();
+        cin.ignore(100, '\n');
+        cin >> userChoice;
+    }
+    
+    return userChoice;
+}
 
 // Name: applyImageFlip()
 // Desc: horizontally flips all pixels in each row, mirroring the image
@@ -215,6 +245,34 @@ void applyImageFlip(Image &image) {
     }
 }
 
+// Name: applyGrayScale()
+// Desc: Changes the input image into a grayscale image
+// Input: const Image &image
+// Output: none
+// Return: none
+void applyGrayscale(Image &image) {
+    int nextR = 0;
+    int nextB = 0;
+    int nextG = 0;
+    int avgColor = 0;
+    // Loop through each row (height)
+    for (int h = 0; h < image.height; ++h) {
+        // Loop through each column (width)
+        for (int w = 0; w < image.width; ++w) {
+            // Find the average value to set RGB to
+            nextR = image.pixels[h][w].r;
+            nextG = image.pixels[h][w].g;
+            nextB = image.pixels[h][w].b;
+
+            avgColor = (nextR + nextG + nextB) / 3;
+            // Apply average value to RGB of that pixel
+            image.pixels[h][w].r = avgColor;
+            image.pixels[h][w].g = avgColor;
+            image.pixels[h][w].b = avgColor;
+        }
+    }
+}
+
 // Name: printNewImage()
 // Desc: Outputs the final image data to a new file
 // Input: const Image &image
@@ -229,6 +287,7 @@ void printNewImage(const Image &image) {
         cout << "Failed to open output.ppm file" << endl;
     }
     else {
+        cout << endl << "Writing image to output.ppm ..." << endl;
         // Write header
         outFile << "P3" << endl;
         outFile << image.width << " " << image.height << endl;
@@ -246,4 +305,5 @@ void printNewImage(const Image &image) {
     }
 
     outFile.close();
+    cout << endl << "Writing complete!" << endl;
 }
