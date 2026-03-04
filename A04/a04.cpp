@@ -1,45 +1,31 @@
 #include <iostream>
-#include "arraystack.cpp"
+#include "arraystack.h"
+#include "liststack.h"
 
 using namespace std;
-
-struct ListStack {
-    int value;
-    ListStack* next;
-
-    void push(ListStack* &stack, int value) {
-
-    }
-
-    int pop(ListStack* &stack) {
-
-    }
-
-    int peek(const ListStack* stack) {
-
-    }
-
-    bool isEmpty(const  ListStack* stack) {
-
-    }
-
-};
 
 // Function prototypes
 void welcome();
 void testArrayStack(ArrayStack &stack);
-void testListStack();
+void testListStack(ListStack* &stack);
 
 int main() {
 
     // Setup stack structs
     ArrayStack arrayStack;
+    ListStack* listStack = nullptr;
 
     welcome();
 
-    // test the array stack implimentation
+    // Test the array stack implimentation
     cout << endl << "=-=-=-= First, the Array Stack =-=-=-=" << endl;
     testArrayStack(arrayStack);
+
+    // Test linked list stack implimentation
+    cout << endl << "=-=-=-= Next, the Linked List Stack =-=-=-=" << endl;
+    testListStack(listStack);
+
+    cout << endl << "=-=-=-= Thank you for using the Array and Linked List demonstrator! =-=-=-=" << endl;
 
     return 0;
 }
@@ -100,4 +86,38 @@ void testArrayStack(ArrayStack &stack) {
     
 }
 
-void testListStack();
+void testListStack(ListStack* &stack) {
+
+    // Push 5 values
+    cout << endl << "=-=-= Pushing 5 values to the stack =-=-=" << endl;
+    for (int i = 0; i < 5; ++i) {
+        push(stack, i);
+    }
+    printStack(stack);
+
+    // Peek a value
+    cout << endl << "=-=-= Peek the current stack =-=-=" << endl;
+    int peekedVal = peek(stack);
+    cout << "Peeked Value: " << peekedVal << endl;
+    
+    // Push new values
+    cout << endl << "=-=-= Pushing 5 more values to the stack =-=-=" << endl;
+    for (int i = 10; i < 15; ++i) {
+        push(stack, i);
+    }
+    printStack(stack);
+
+    // Pop some values
+    cout << endl << "=--=-= Popping 3 values =-=-=" << endl;
+    int poppedVal = 0;
+    for (int i = 0; i < 3; ++i) {
+        poppedVal = pop(stack);
+        cout << "Value popped: " << poppedVal << endl;
+    }
+    printStack(stack);
+
+    // Add another value
+    cout << endl << "=--=-= Adding a final Value =-=-=" << endl;
+    push(stack, 20);
+    printStack(stack);
+}
