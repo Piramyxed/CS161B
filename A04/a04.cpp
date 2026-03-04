@@ -1,66 +1,7 @@
 #include <iostream>
+#include "arraystack.cpp"
 
 using namespace std;
-
-struct ArrayStack {
-    static const int MAX_SIZE = 10;
-    int value[MAX_SIZE];
-    int count;
-
-    void push(ArrayStack &stack, int value) {
-        // Check if stack is full
-        if (!isFull(stack)) {
-            // If not, shift elements right then add to front
-            for (int i = MAX_SIZE - 2; i >= 0; --i) {
-                stack.value[i + 1] = stack.value[i];
-            }
-            stack.value[0] = value;
-            stack.count++;
-        }
-        else {
-            cout << "Error: Stack is full!" << endl;
-        }
-        
-    }
-
-    int pop(ArrayStack &stack) {
-        // Check if array is empty
-        if (!isEmpty(stack)) {
-            // Get first value
-            int value = stack.value[0];
-
-            // Update the array
-            for (int i = 0; i < MAX_SIZE - 1; ++i) {
-                stack.value[i] = stack.value[i + 1];
-            }
-
-            stack.count--;
-            return value;
-
-        }
-        else {
-            cout << "Error: Stack is empty!" << endl;
-        }
-    }
-
-    int peek(ArrayStack stack) {
-        if (!isEmpty(stack)) {
-            return stack.value[0];
-        }
-        else {
-            cout << "Error: Stack is empty!" << endl;
-        }
-    }
-
-    bool isEmpty(const ArrayStack &stack) {
-        return stack.count == -1;
-    }
-
-    bool isFull(const ArrayStack &stack) {
-        return stack.count == stack.MAX_SIZE - 1;
-    }
-
-};
 
 struct ListStack {
     int value;
@@ -84,7 +25,79 @@ struct ListStack {
 
 };
 
+// Function prototypes
+void welcome();
+void testArrayStack(ArrayStack &stack);
+void testListStack();
+
 int main() {
+
+    // Setup stack structs
+    ArrayStack arrayStack;
+
+    welcome();
+
+    // test the array stack implimentation
+    cout << endl << "=-=-=-= First, the Array Stack =-=-=-=" << endl;
+    testArrayStack(arrayStack);
 
     return 0;
 }
+
+void welcome() {
+    cout << "Welcome to the Array and Linked List stack program!" << endl;
+}
+
+void testArrayStack(ArrayStack &stack) {
+    initStack(stack);
+
+    // Push 5 values
+    cout << "=-=-= Pushing 5 values to the stack =-=-=" << endl;
+    for (int i = 0; i < 5; ++i) {
+        push(stack, i);
+        cout << "Value at index " << i << ": " << stack.value[i] << endl;
+    }
+
+    // Peek a value
+    cout << endl << "=-=-= Peek the current stack =-=-=" << endl;
+    int peekVal = peek(stack);
+    cout << "Expecting: 4 -- Got: " << peekVal << endl;
+
+    // Attempt to push 6 values
+    cout << endl << "=-=-= Attempting to push too many values =-=-=" << endl;
+    for (int i = 5; i < 11; ++i) {
+        push(stack, i);
+        if (i < 10) {
+            cout << "Value at index " << i << ": " << stack.value[i] << endl;
+        }
+        else {
+            cout << "Unable to push further values" << endl;
+        }
+    }
+
+    // Print out the array
+    cout << endl << "=-=-= Printing out the current stack =-=-=" << endl;
+    printValues(stack);
+
+    // Pop some values
+    cout << endl << "=--=-= Popping 3 values =-=-=" << endl;
+    int poppedVal = 0;
+    for (int i = 0; i < 3; ++i) {
+        poppedVal = pop(stack);
+        cout << "Value popped: " << poppedVal << endl;
+    }
+
+    // Add new values
+    cout << endl << "=-=-= Adding new values to the end =-=-=" << endl;
+    for (int i = 7; i < 10; ++i) {
+        push(stack, i + 10);
+        cout << "Value at index " << i << ": " << stack.value[i] << endl;
+    }
+
+    // Print final array
+    cout << endl << "=-=-= Final Array Stack =-=-=" << endl;
+    printValues(stack);
+    
+}
+
+void testListStack();
