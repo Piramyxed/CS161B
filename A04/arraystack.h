@@ -8,6 +8,7 @@ struct ArrayStack {
     int count;
 };
 
+// Function Prototypes
 void initStack(ArrayStack &stack);
 void push(ArrayStack &stack, int value);
 int pop(ArrayStack &stack);

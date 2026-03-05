@@ -1,3 +1,15 @@
+/******************************************************************************
+# Author:       Aiden Jungels
+# Assignment:   A04
+# Date:         3/4/26
+# Description:  This program creates and manages both an Array Stack and a
+#               linked list stack, then preforms a series of Push, Pop, and 
+#               seek operations on both versions, displaying the results 
+#               along the way.
+# Input:        None
+# Output:       Various displays of Stack operations
+# Sources:      CS161B Github repo
+******************************************************************************/
 #include <iostream>
 #include "arraystack.h"
 #include "liststack.h"
@@ -9,6 +21,7 @@ void welcome();
 void testArrayStack(ArrayStack &stack);
 void testListStack(ListStack* &stack);
 
+// Main Function
 int main() {
 
     // Setup stack structs
@@ -25,15 +38,26 @@ int main() {
     cout << endl << "=-=-=-= Next, the Linked List Stack =-=-=-=" << endl;
     testListStack(listStack);
 
-    cout << endl << "=-=-=-= Thank you for using the Array and Linked List demonstrator! =-=-=-=" << endl;
+    cout << endl << "=-=-=-= Thank you for using the Array and "
+         << "Linked List demonstrator! =-=-=-=" << endl;
 
     return 0;
 }
 
+// Name: welcome()
+// Desc: Displays welcome message
+// Input: none
+// Output: Welcome message
+// Return: none
 void welcome() {
     cout << "Welcome to the Array and Linked List stack program!" << endl;
 }
 
+// Name: testArrayStack()
+// Desc: Does all the tests on the array stack function
+// Input: ArrayStack &stack
+// Output: Results of all the operations
+// Return: none
 void testArrayStack(ArrayStack &stack) {
     initStack(stack);
 
@@ -86,6 +110,11 @@ void testArrayStack(ArrayStack &stack) {
     
 }
 
+// Name: testListStack()
+// Desc: Tests the linked list stack opetations
+// Input: ListStack* &stack
+// Output: Results of the various operations
+// Return: none
 void testListStack(ListStack* &stack) {
 
     // Push 5 values

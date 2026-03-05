@@ -6,6 +6,7 @@ struct ListStack {
     ListStack* next;
 };
 
+// Function Prototypes
 void push(ListStack* &stack, int value);
 int pop(ListStack* &stack);
 int peek(const ListStack* stack);

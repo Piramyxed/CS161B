@@ -3,10 +3,20 @@
 
 using namespace std;
 
+// Name: initStack()
+// Desc: Sets the stack count to -1 to signify its empty
+// Input: ArrayStack &stack
+// Output: none
+// Return: none
 void initStack(ArrayStack &stack) {
     stack.count = -1;
 }
 
+// Name: push()
+// Desc: pushes to the top item of the stack
+// Input: ArrayStack &stack, int value
+// Output: Maybe stack full warning
+// Return: none
 void push(ArrayStack &stack, int value) {
         // Check if stack is full
         if (!isFull(stack)) {
@@ -23,6 +33,11 @@ void push(ArrayStack &stack, int value) {
         
     }
 
+// Name: pop()
+// Desc: Gets and removes the top value of the stack
+// Input: ArrayStack &stack
+// Output: Maybe stack is empty warning
+// Return: int value, or -1 if error
 int pop(ArrayStack &stack) {
     // Check if array is empty
     if (!isEmpty(stack)) {
@@ -41,6 +56,11 @@ int pop(ArrayStack &stack) {
     }
 }
 
+// Name: peek()
+// Desc: Gets the top item without removing it
+// Input: ArrayStack stack
+// Output: Maybe stack is empty warning
+// Return: value at the top of the stack
 int peek(ArrayStack stack) {
     if (!isEmpty(stack)) {
         return stack.value[stack.count - 1];
@@ -51,14 +71,29 @@ int peek(ArrayStack stack) {
     }
 }
 
+// Name: isEmpty()
+// Desc: Checks if stack is empty
+// Input: const ArrayStack &stack
+// Output: None
+// Return: bool true if empty
 bool isEmpty(const ArrayStack &stack) {
     return stack.count == -1;
 }
 
+// Name: isFull()
+// Desc: Checks if the stack is full
+// Input: const ArrayStack &stack
+// Output: none
+// Return: true if full
 bool isFull(const ArrayStack &stack) {
     return stack.count == MAX_SIZE;
 }
 
+// Name: printvalues()
+// Desc: Prints all the values in the stack formatted
+// Input: const ArrayStack &stack
+// Output: List of all values
+// Return: none
 void printValues(const ArrayStack &stack) {
     for (int i = 0; i < MAX_SIZE; ++i) {
         cout << "Value at index " << i << ": " << stack.value[i] << endl;
