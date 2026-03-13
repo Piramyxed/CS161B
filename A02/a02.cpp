@@ -1,7 +1,7 @@
 /******************************************************************************
 # Author:       Aiden Jungels
 # Assignment:   Coding Assignment 5
-# Date:         3/13/26
+# Date:         3/12/26
 # Description:  A dungeon crawler game with 5 levels where the player must
 #               move through all the levels one square at a time, collecting
 #               treasure and avoiding the enmies
@@ -10,6 +10,7 @@
 #               point, death, and move statistics
 ******************************************************************************/
 #include <iostream>
+#include <cctype>
 #include <cstring>
 #include <cctype>
 
